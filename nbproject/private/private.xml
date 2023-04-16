@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/RoleManager.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/Session.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/ProcessView.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/UserManager.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/ChangePassword.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/PGA.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/BackupRestore.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/MainForm.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/ProfileManager.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/SGA.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/Tablespaceview.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/OracleConnection.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/Instance.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/DemoJFileChooser.java</file>
+            <file>file:/D:/NetBeansProjects/Oracle/src/oracle/datafile.java</file>
+        </group>
+    </open-files>
+</project-private>
