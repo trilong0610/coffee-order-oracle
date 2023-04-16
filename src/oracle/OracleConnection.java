@@ -6,8 +6,8 @@ public class OracleConnection
 {
     public Connection conn;
     public static Statement stmt=null;
-    public static String url="jdbc:oracle:sys:@localhost:1521:qlcoffee";
-    public static String username="sys";
+    public static String url="jdbc:oracle:thin:@localhost:1521:orcl";
+    public static String username="sys as sysdba";
     public static String password="Oracle123";
     public void setUrl(String url)
     {

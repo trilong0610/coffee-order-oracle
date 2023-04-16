@@ -3,15 +3,34 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package oracle;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+import oracle.model.ProductModel;
+import oracle.components.SanPhamLayout;
+import oracle.model.CartModel;
+ 
 /**
  *
  * @author QTrun
@@ -23,10 +42,19 @@ public class MainForm extends javax.swing.JFrame {
      */
     Statement stmt;
     OracleConnection Oracle;
+    ArrayList<ProductModel> productModels;
+    ArrayList<CartModel> cartModels;
     public MainForm() {
         setTitle("Trang chính");
         initComponents();
+        init();
+    }
+    private void init(){
         Oracle = new OracleConnection();
+        cartModels = new ArrayList<>();
+        productModels = new ArrayList<>();
+        txt_quantity_order_product.setValue(1);
+        loadListProducts();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,6 +67,21 @@ public class MainForm extends javax.swing.JFrame {
 
         lbl_username = new javax.swing.JLabel();
         lbl_last_login = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        layout_product = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table_product = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        txt_product_name = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txt_quantity_order_product = new javax.swing.JSpinner();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        list_cart = new javax.swing.JList<>();
+        jLabel3 = new javax.swing.JLabel();
+        txt_total = new javax.swing.JLabel();
+        btn_add_to_cart = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        layout_order = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -67,6 +110,142 @@ public class MainForm extends javax.swing.JFrame {
 
         lbl_last_login.setText("Đăng nhập cuối:");
         lbl_last_login.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        layout_product.setMaximumSize(new java.awt.Dimension(728, 526));
+        layout_product.setRequestFocusEnabled(false);
+
+        table_product.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", "ID", "Tên Sản Phẩm", "Giá", "Tồn Kho"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Integer.class, java.lang.String.class, java.lang.Float.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        table_product.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                table_productMousePressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(table_product);
+
+        jLabel1.setText("Tên sản phẩm:");
+
+        jLabel2.setText("Số lượng:");
+
+        jScrollPane1.setViewportView(list_cart);
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setText("Tổng tiền");
+
+        txt_total.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        txt_total.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        txt_total.setText("0");
+
+        btn_add_to_cart.setText("Thêm vào giỏ");
+        btn_add_to_cart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_add_to_cartActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Tạo đơn");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout_productLayout = new javax.swing.GroupLayout(layout_product);
+        layout_product.setLayout(layout_productLayout);
+        layout_productLayout.setHorizontalGroup(
+            layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout_productLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout_productLayout.createSequentialGroup()
+                        .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_product_name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout_productLayout.createSequentialGroup()
+                                .addComponent(txt_quantity_order_product, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addComponent(btn_add_to_cart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout_productLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                        .addGap(3, 3, 3)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout_productLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(txt_total, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        layout_productLayout.setVerticalGroup(
+            layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout_productLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE))
+                .addGap(23, 23, 23)
+                .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(txt_product_name, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout_productLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_total, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout_productLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txt_quantity_order_product, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout_productLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                            .addComponent(btn_add_to_cart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Tạo đơn", layout_product);
+
+        javax.swing.GroupLayout layout_orderLayout = new javax.swing.GroupLayout(layout_order);
+        layout_order.setLayout(layout_orderLayout);
+        layout_orderLayout.setHorizontalGroup(
+            layout_orderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 931, Short.MAX_VALUE)
+        );
+        layout_orderLayout.setVerticalGroup(
+            layout_orderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 573, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Đơn hàng", layout_order);
 
         jMenu1.setText("Tệp");
 
@@ -178,46 +357,33 @@ public class MainForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(419, 419, 419)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_last_login, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                    .addComponent(lbl_username, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_username, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_last_login, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jTabbedPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbl_username)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbl_last_login)
-                .addContainerGap(393, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
    
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:  
-        try {
-            Oracle.openConnection();
-            stmt = Oracle.conn.createStatement();
-            String sql = "select username from user_users";
-            ResultSet rset = stmt.executeQuery(sql);
-            rset.next();
-            String username = rset.getString(1);
-            lbl_username.setText("Username: " + username);
-            String querry = "SELECT last_login FROM dba_users WHERE username = '"+ username+ "'";
-            rset = stmt.executeQuery(querry);
-            rset.next();
-            String last_login = rset.getString(1);
-            lbl_last_login.setText(String.format("Last Login: %s", last_login));
-            rset.close();
-            Oracle.closeConnection();            
-        } catch (SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void showSGAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showSGAActionPerformed
@@ -293,7 +459,145 @@ public class MainForm extends javax.swing.JFrame {
         RoleManager fm = new RoleManager();
         fm.setVisible(true);
     }//GEN-LAST:event_menuItemRoleActionPerformed
+
+    private void table_productMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_productMousePressed
+        // TODO add your handling code here:
+        String name_product = (String) table_product.getValueAt(table_product.getSelectedRow(), 2);
+        txt_product_name.setText(name_product);
+    }//GEN-LAST:event_table_productMousePressed
+
+    private void btn_add_to_cartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_add_to_cartActionPerformed
+        // TODO add your handling code here:
+        // Lay san pham duoc chon
+        int id_selected = (int) table_product.getValueAt(table_product.getSelectedRow(), 1);
+        ProductModel productModel = new ProductModel();
+        for (ProductModel item : productModels) {
+            if (item.getIdProduct() == id_selected) {
+                productModel = item;
+                break;
+            }
+        }
+        // kiem tra sp duoc chon da co trong gio hang chua
+        boolean flag = false;
+        for (int i = 0; i < cartModels.size(); i++) {
+            CartModel cartModel = cartModels.get(i);
+            if (cartModel.getProductModel() == productModel) {
+                int newQuan = cartModel.getQuantity() + (int) txt_quantity_order_product.getValue();
+                cartModels.get(i).setQuantity(newQuan);
+                flag = true;
+                break;
+            }
+        }
+        
+        if (!flag) {
+            // chua co trong gio hang => them moi
+            cartModels.add(new CartModel(productModel, (int) txt_quantity_order_product.getValue()));
+        }
+            
+        // Cap nhat len listview cart
+        updateListViewCart(cartModels);
+        updateTotalBill(cartModels);
+        txt_quantity_order_product.setValue(1);
+    }//GEN-LAST:event_btn_add_to_cartActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, cartModels);
+    }//GEN-LAST:event_jButton1ActionPerformed
     
+    private void updateListViewCart(ArrayList<CartModel> cartModels){
+        list_cart.removeAll();
+        DefaultListModel defaultListModel = new DefaultListModel();
+        for (CartModel cartModel : cartModels) {
+            defaultListModel.addElement(
+                    cartModel.getProductModel().getNameProduct() +
+                            " x" +
+                            cartModel.getQuantity() + " " +
+                            formatNumber(cartModel.getQuantity() * cartModel.getProductModel().getPriceProduct()) + "đ"
+                            
+            );
+        }
+        list_cart.setModel(defaultListModel);
+    }
+    
+    private void updateTotalBill(ArrayList<CartModel> cartModels){
+        float total = 0;
+        for (CartModel cartModel : cartModels) {
+            total += cartModel.getQuantity() * cartModel.getProductModel().getPriceProduct();
+        }
+        txt_total.setText(formatNumber(total) + " đ");
+    }
+    
+    private void loadListProducts(){
+        // TODO add your handling code here:  
+        this.productModels.add(new ProductModel(0, "Cà phê sữa", 20000,10, getClass().getResource("/oracle/assets/images/7up.jpg").toString()));
+        this.productModels.add(new ProductModel(1, "Cà phê đá", 20000,20, "./assets/images/7up.jpg"));
+        this.productModels.add(new ProductModel(2, "Nước Cam", 15000,31, "./assets/images/7up.jpg"));
+        this.productModels.add(new ProductModel(3, "Soda", 20000,13, "./assets/images/7up.jpg"));
+        this.productModels.add(new ProductModel(4, "Nước lọc", 10000,22, "./assets/images/7up.jpg"));
+        try {
+            Oracle.openConnection();
+            stmt = Oracle.conn.createStatement();
+            String sql = "select username from user_users";
+            ResultSet rset = stmt.executeQuery(sql);
+            rset.next();
+            String username = rset.getString(1);
+            lbl_username.setText("Username: " + username);
+            String querry = "SELECT last_login FROM dba_users WHERE username = '"+ username+ "'";
+            rset = stmt.executeQuery(querry);
+            rset.next();
+            String last_login = rset.getString(1);
+            lbl_last_login.setText(String.format("Last Login: %s", last_login));
+            rset.close();
+            Oracle.closeConnection();            
+        } catch (SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+//       Tao dt productlayout
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("");
+        tableModel.addColumn("ID");
+        tableModel.addColumn("Tên Sản Phẩm");
+        tableModel.addColumn("Giá");
+        tableModel.addColumn("Số lượng tồn");
+        for (ProductModel productModel : productModels) {
+            tableModel.addRow(new Object[]{
+                new ImageIcon(productModel.getImageProduct()),
+                productModel.getIdProduct(),
+                productModel.getNameProduct(),
+                formatNumber(productModel.getPriceProduct()) + "đ",
+                productModel.getQuantityProduct()
+            });
+        }
+        table_product.setModel(tableModel);
+        table_product.setRowHeight(50);
+//        set hien thi hinh anh cho cot 0
+        table_product.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer());
+//        set width choc ac cot
+        table_product.getColumnModel().getColumn(0).setMinWidth(100);
+        table_product.getColumnModel().getColumn(0).setMaxWidth(100);
+        table_product.getColumnModel().getColumn(1).setPreferredWidth(5);
+        table_product.getColumnModel().getColumn(2).setPreferredWidth(250);
+        table_product.getColumnModel().getColumn(3).setPreferredWidth(30);
+        table_product.getColumnModel().getColumn(4).setPreferredWidth(10);
+        table_product.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+    }
+    
+    private void removeCartItem(int idProduct){
+        CartModel cartModel = new CartModel();
+        for (CartModel item : cartModels) {
+            if (item.getProductModel().getIdProduct() == idProduct) {
+                cartModels.remove(item);
+                break;
+            }
+        }
+    }
+    
+    private String formatNumber(Object number){
+        return new DecimalFormat("#,###").format(number);
+    }
+        
     /**
      * @param args the command line arguments
      */    
@@ -331,26 +635,60 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         
+        
+    
     }
+    
+    // Tạo một TableCellRenderer tùy chỉnh cho việc hiển thị hình ảnh
+    class ImageRenderer extends JLabel implements TableCellRenderer {
+        public ImageRenderer() {
+            setOpaque(true);
+        }
 
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value instanceof ImageIcon) {
+                // Nếu giá trị là ImageIcon, thiết lập nó làm biểu tượng cho nhãn
+                setIcon((ImageIcon) value);
+            } else {
+                // Nếu không phải, thiết lập văn bản cho nhãn
+                setText((value == null) ? "" : value.toString());
+            }
+            return this;
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem InstanceView;
     private javax.swing.JMenuItem ProcessView;
     private javax.swing.JMenuItem SessionManager;
     private javax.swing.JMenuItem Tablespace;
+    private javax.swing.JButton btn_add_to_cart;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel layout_order;
+    private javax.swing.JPanel layout_product;
     private javax.swing.JLabel lbl_last_login;
     private javax.swing.JLabel lbl_username;
+    private javax.swing.JList<String> list_cart;
     private javax.swing.JMenuItem menuItemChangePw;
     private javax.swing.JMenuItem menuItemProfiles;
     private javax.swing.JMenuItem menuItemRole;
     private javax.swing.JMenuItem menuItemUser;
     private javax.swing.JMenuItem showPGA;
     private javax.swing.JMenuItem showSGA;
+    private javax.swing.JTable table_product;
+    private javax.swing.JLabel txt_product_name;
+    private javax.swing.JSpinner txt_quantity_order_product;
+    private javax.swing.JLabel txt_total;
     // End of variables declaration//GEN-END:variables
 }
