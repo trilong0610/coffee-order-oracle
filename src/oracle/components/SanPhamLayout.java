@@ -4,14 +4,14 @@
  */
 package oracle.components;
 
-import oracle.model.ProductModel;
+import oracle.model.SanPhamModel;
 
 /**
  *
  * @author trilo
  */
 public class SanPhamLayout extends javax.swing.JPanel {
-    private ProductModel productModel = new ProductModel();
+    private SanPhamModel productModel = new SanPhamModel();
     /**
      * Creates new form SanPhamLayout
      */
@@ -19,7 +19,7 @@ public class SanPhamLayout extends javax.swing.JPanel {
         initComponents();
     }
     
-    public SanPhamLayout(ProductModel productModel){
+    public SanPhamLayout(SanPhamModel productModel){
         this.productModel = productModel;
         this.txt_name_product.setText(productModel.getNameProduct());
         this.txt_price.setText(productModel.getNameProduct());
